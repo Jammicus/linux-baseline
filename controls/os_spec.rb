@@ -236,3 +236,14 @@ control 'os-11' do
     its(:group) { should match(/^root|syslog$/) }
   end
 end
+
+control 'os-12' do
+  impact 1.0
+  title 'CPU Vulnerabilities'
+  desc '/sys/devices/system/cpu/vulnerabilities/ should have no files listing vulnerable'
+  Dir.foreach("/sys/devices/system/cpu/vulnerabilities/") do |x|
+    describe file('/sys/devices/system/cpu/vulnerabilities/'+ x) do
+      its(:content) { should_not match(/Vulnerable:/) }
+    end
+  end
+end
